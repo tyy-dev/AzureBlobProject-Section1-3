@@ -1,0 +1,54 @@
+﻿@model HomeViewModel
+
+<div class="p-4">
+    <h4 class="text-primary">Blob Storage Hierarchy</h4>
+
+    @if (!Model.HasContainers)
+    {
+        <p>No containers found.</p>
+    }
+    else
+    {
+        @foreach (BlobContainerViewModel blobContainer in Model.Containers)
+        {
+            <div class="mb-3 border p-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="text-info mb-0">Container: @blobContainer.ContainerName</h5>
+                    <div>
+                        <a class="btn btn-primary btn-sm text-white"
+                           asp-action="Manage"
+                           asp-controller="Blob"
+                           asp-route-containerName="@blobContainer.ContainerName">
+                            Manage
+                        </a>
+                    </div>
+                </div>
+
+                @if (!blobContainer.HasBlobs)
+                {
+                    <p>No blobs in this container.</p>
+                }
+                else
+                {
+                    <ul>
+                        @foreach (BlobContainerViewModelItem blob in blobContainer.Blobs)
+                        {
+                            <li>
+                                <strong>@blob.Name</strong>
+                                @if (!string.IsNullOrEmpty(blob.Title))
+                                {
+                                    <span> - Title: @blob.Title</span>
+                                }
+                                @if (!string.IsNullOrEmpty(blob.Comment))
+                                {
+                                    <span> - Comment: @blob.Comment</span>
+                                }
+                                <span> - <a href="@blob.Uri">View</a></span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,35 @@
+﻿@using AzureUdemy.Models.ViewModels
+@model AzureUdemy.Models.ViewModels.BlobContainerViewModel
+
+<div class="container p-4 border">
+    <div class="row">
+        <div class="col-6">
+            <h3> Container Name - @Model.ContainerName</h3>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-action="AddFile" asp-controller="Blob"
+               asp-route-containerName="@Model.ContainerName" class="btn btn-success">Add Blob</a>
+        </div>
+    </div>
+    <div class="container pt-4">
+        @foreach (BlobContainerViewModelItem blob in Model.Blobs)
+        {
+            <div class="row py-1">
+                <div class="col-6">
+                    <a asp-action="ViewFile" asp-controller="Blob" asp-route-name="@blob.Name"
+                       asp-route-containerName="@Model.ContainerName">
+                        @blob.Name
+                    </a>
+
+                </div>
+                <div class="col-6">
+
+                    <a asp-action="DeleteFile" asp-controller="Blob" asp-route-name="@blob.Name" class="btn btn-danger"
+                       asp-route-containerName="@Model.ContainerName">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
