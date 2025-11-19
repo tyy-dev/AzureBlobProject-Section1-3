@@ -11,17 +11,17 @@ namespace AzureUdemy.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<BlobContainerViewModel> containers = await this._containerService.GetAllContainerAndBlobs();
+            List<BlobContainerViewModel> containers = await this._containerService.GetAllContainerAndBlobsAsync();
             HomeViewModel viewModel = new() { Containers = containers };
             return this.View(viewModel);
         }
 
         public async Task<IActionResult> SingleContainer(string containerName)
         {
-            BlobContainerViewModel blobs = await this._containerService.GetAllBlobsForContainer(containerName);
+            BlobContainerViewModel blobs = await this._containerService.GetAllBlobsForContainerAsync(containerName);
             return this.View("Index", new HomeViewModel
             {
-                Containers = [blobs]
+                Containers = [blobs],
             });
         }
 

@@ -14,7 +14,7 @@ public class BlobController(IBlobService blobService) : Controller
     {
         List<BlobItem> blobItems = await this._blobService.GetAllBlobs(containerName);
         BlobContainerViewModel viewModel = BlobContainerViewModel.FromBlobItems(containerName, blobItems);
-        return this.View(viewModel);
+        return this.View( viewModel);
     }
 
     [HttpGet]
@@ -22,7 +22,7 @@ public class BlobController(IBlobService blobService) : Controller
     {
         BlobFileViewModel model = new()
         {
-            ContainerName = containerName
+            ContainerName = containerName,
         };
         return this.View(model);
     }
@@ -58,7 +58,7 @@ public class BlobController(IBlobService blobService) : Controller
 
     [HttpGet]
     public async Task<IActionResult> ViewFile(string name, string containerName) =>
-        this.Redirect(await this._blobService.GetBlobUri(name, containerName));
+        this.Redirect(this._blobService.GetBlobAbsoluteUri(name, containerName));
 
     public async Task<IActionResult> DeleteFile(string name, string containerName)
     {

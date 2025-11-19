@@ -6,34 +6,34 @@ namespace AzureUdemy.Services;
 
 public class ContainerService(BlobServiceClient blobServiceClient) : BaseBlobService(blobServiceClient), IContainerService
 {
-    public async Task CreateContainer(string containerName) =>
-        await this.GetContainerClient(containerName).CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
-
-    public async Task DeleteContainer(string containerName) =>
-        await this.GetContainerClient(containerName).DeleteIfExistsAsync();
-    public async Task<List<BlobContainerItem>> GetAllContainers() =>
-        await this._blobClient.GetBlobContainersAsync().ToListAsync();
-
-    public async Task<List<BlobContainerViewModel>> GetAllContainerAndBlobs()
+    public ValueTask<List<BlobContainerItem>> GetAllContainers() =>
+        this._blobClient.GetBlobContainersAsync().ToListAsync();
+    public async Task<List<BlobContainerViewModel>> GetAllContainerAndBlobsAsync()
     {
         List<BlobContainerViewModel> result = [];
-        List<BlobContainerItem> containerItems = await this.GetAllContainers();
+        List<BlobContainerItem> containerItems = await this.GetAllContainers().ConfigureAwait(false);
 
         foreach (BlobContainerItem containerItem in containerItems)
         {
-            List<BlobContainerViewModelItem> blobs = await this.GetContainerBlobsModels(containerItem.Name);
+            List<BlobContainerViewModelItem> blobs = await this.GetContainerBlobsModels(containerItem.Name).ConfigureAwait(false);
             result.Add(new BlobContainerViewModel
             {
                 ContainerName = containerItem.Name,
-                Blobs = blobs
+                Blobs = blobs,
             });
         }
 
         return result;
     }
-    public async Task<BlobContainerViewModel> GetAllBlobsForContainer(string containerName) => new()
+    public async Task<BlobContainerViewModel> GetAllBlobsForContainerAsync(string containerName) => new()
     {
         ContainerName = containerName,
-        Blobs = await this.GetContainerBlobsModels(containerName)
+        Blobs = await this.GetContainerBlobsModels(containerName).ConfigureAwait(false),
     };
+
+    public Task CreateContainer(string containerName) =>
+        this.GetContainerClient(containerName).CreateIfNotExistsAsync(PublicAccessType.BlobContainer);
+
+    public Task DeleteContainer(string containerName) =>
+        this.GetContainerClient(containerName).DeleteIfExistsAsync();
 }

@@ -5,10 +5,9 @@ namespace AzureUdemy.Services
 {
     public interface IContainerService
     {
-        Task<List<BlobContainerViewModel>> GetAllContainerAndBlobs();
-        Task<List<BlobContainerItem>> GetAllContainers();
-
-        Task<BlobContainerViewModel> GetAllBlobsForContainer(string containerName);
+        ValueTask<List<BlobContainerItem>> GetAllContainers();
+        Task<List<BlobContainerViewModel>> GetAllContainerAndBlobsAsync();
+        Task<BlobContainerViewModel> GetAllBlobsForContainerAsync(string containerName);
         Task CreateContainer(string containerName);
         Task DeleteContainer(string containerName);
     }

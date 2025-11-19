@@ -16,7 +16,7 @@ public record BlobContainerViewModel
         return new BlobContainerViewModel
         {
             ContainerName = containerName,
-            Blobs = blobs
+            Blobs = blobs,
         };
     }
 
